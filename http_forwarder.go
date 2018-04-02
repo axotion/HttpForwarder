@@ -89,7 +89,7 @@ func (e sites) setAuthMethodForForwardSite(site *forwardSite, r *http.Request) {
 	}
 }
 
-func (e sites) executeHTTPRequests(headers http.Header, wantedSite string, forwardSites []forwardSite, content []byte, originIP string) {
+func (e sites) forwardHTTPRequest(headers http.Header, wantedSite string, forwardSites []forwardSite, content []byte, originIP string) {
 
 	for _, forwardSite := range forwardSites {
 		go e.executeHTTPRequest(forwardSite, headers, originIP, content)

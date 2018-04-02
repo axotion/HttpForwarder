@@ -21,7 +21,7 @@ func (e sites) Run(host string, port string) {
 			for _, client := range configSites {
 				log.Println(client.Identificator)
 				if client.Identificator == vars["client"] {
-					go e.executeHTTPRequests(r.Header, vars["client"], client.Forward, body, r.RemoteAddr)
+					go e.forwardHTTPRequest(r.Header, vars["client"], client.Forward, body, r.RemoteAddr)
 					w.WriteHeader(http.StatusOK)
 					return
 				}
