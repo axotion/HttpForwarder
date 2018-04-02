@@ -1,0 +1,50 @@
+[
+    {
+        "_client" : "AASA",
+        "identificator" : "7ac2970651534830874ba712a30de940", 
+        "forward" : [
+            {
+                "address" : "http://bin.ring0.cc/187q5lg1",
+                "method" : "POST",
+                "auth" : "",
+                "username" : "",
+                "password" : "",
+                "retry" : 10,
+                "expected_status" : 200
+            },
+            
+            {
+                "address" : "https://www.dobreprogramy.pl/fdsfdsfdsfsfs",
+                "method" : "POST",
+                "auth" : "basic",
+                "username" : "username",
+                "password" : "password",
+                "retry" : 30,
+                "expected_status" : 200
+            }
+        ]
+    },
+    {
+        "identificator" : "POZYCZKAGO", 
+        "forward" : [
+            {
+                "address" : "http://test1.com/id",
+                "method" : "POST",
+                "auth" : "",
+                "username" : "",
+                "password" : "",
+                "retry" : 10,
+                "expected_status" : 200
+            },
+            {
+                "address" : "http://bing1.com/id",
+                "method" : "POST",
+                "auth" : "basic",
+                "username" : "",
+                "password" : "",
+                "retry" : 30,
+                "expected_status" : 200
+            }
+        ]
+    }
+]
