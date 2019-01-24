@@ -1,4 +1,4 @@
-package httpforwarder
+package main
 
 import (
 	"bytes"
@@ -20,7 +20,7 @@ const (
 
 var httpClient *http.Client
 
-type sites []struct {
+type site struct {
 	Identificator string        `json:"identificator"`
 	Forward       []forwardSite `json:"forward"`
 }
@@ -39,27 +39,8 @@ type forwardSite struct {
 func init() {
 	httpClient = &http.Client{Timeout: time.Second * 10}
 }
-
-func (e sites) String() string {
-	var sitesClients string
-
-	for _, site := range e {
-		sitesClients += site.Identificator + " "
-	}
-
-	return sitesClients
-}
-
-/*
-  Function new will create new sites struct "object" with loaded sites from JSON file
-*/
-
-func New() sites {
-	return (sites{}).prepareSites()
-}
-
-func (e sites) prepareSites() sites {
-	sites := sites{}
+func PrepareSites() []*site {
+	sites := make([]*site, 4096)
 	sitesFile, err := os.Open(configFile)
 	defer sitesFile.Close()
 	CheckErr(err, errorPanic)
@@ -72,7 +53,7 @@ func (e sites) prepareSites() sites {
 	return sites
 }
 
-func (e sites) appendHeadersToRequest(headers http.Header, originIP string, r *http.Request) {
+func (e site) appendHeadersToRequest(headers http.Header, originIP string, r *http.Request) {
 
 	for key, value := range headers {
 		r.Header.Add(key, value[0])
@@ -83,20 +64,23 @@ func (e sites) appendHeadersToRequest(headers http.Header, originIP string, r *h
 	r.Header.Add("X-Forwarded-Host", originIP)
 }
 
-func (e sites) setAuthMethodForForwardSite(site *forwardSite, r *http.Request) {
+func (e site) setAuthMethodForForwardSite(site *forwardSite, r *http.Request) {
 	if site.Auth == "basic" {
 		r.SetBasicAuth(site.Username, site.Password)
 	}
 }
 
-func (e sites) forwardHTTPRequest(headers http.Header, wantedSite string, forwardSites []forwardSite, content []byte, originIP string) {
+func (e site) forwardHTTPRequest(r *http.Request, site *site) {
 
-	for _, forwardSite := range forwardSites {
-		go e.executeHTTPRequest(forwardSite, headers, originIP, content)
+	body, err := ioutil.ReadAll(r.Body)
+	CheckErr(err, errorWarning)
+
+	for _, forwardSite := range site.Forward {
+		go e.executeHTTPRequest(forwardSite, r.Header, r.RemoteAddr, body)
 	}
 }
 
-func (e sites) executeHTTPRequest(site forwardSite, headers http.Header, originIP string, content []byte) {
+func (e site) executeHTTPRequest(site forwardSite, headers http.Header, originIP string, content []byte) {
 
 	req, err := http.NewRequest(site.Method, site.Address, bytes.NewBuffer(content))
 	CheckErr(err, errorWarning)
@@ -109,6 +93,7 @@ func (e sites) executeHTTPRequest(site forwardSite, headers http.Header, originI
 
 	for tried >= 0 {
 		log.Printf("Try to call %s", site.Address)
+		log.Println(req.Body)
 		res, err := httpClient.Do(req)
 		if err != nil || res.StatusCode != site.ExpectedStatus {
 			CheckErr(err, errorWarning)

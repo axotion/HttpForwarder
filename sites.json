@@ -4,7 +4,7 @@
         "identificator" : "7ac2970651534830874ba712a30de940", 
         "forward" : [
             {
-                "address" : "http://rig.cc/1test",
+                "address" : "http://ring0.cc/1test",
                 "method" : "POST",
                 "auth" : "",
                 "username" : "",
@@ -14,7 +14,7 @@
             },
             
             {
-                "address" : "https://www.dobretrojany.pl/fdsfdsfdsfsfs",
+                "address" : "https://requestbin.fullcontact.com/18y3pyc1",
                 "method" : "POST",
                 "auth" : "basic",
                 "username" : "username",
