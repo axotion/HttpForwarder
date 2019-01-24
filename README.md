@@ -22,7 +22,7 @@ $ git clone git@github.com:axotion/HttpForwarder.git
 
 ### Usage
 
-Move sites.json to your project folder and edit it
+Edit sites.json 
 
 ```json
 [
