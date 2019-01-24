@@ -17,7 +17,7 @@ I created this tool for better control requests from companies I work with. 504 
 HttoForward requires x86/x64/arm to complie and at least GO 1.6.
 
  ```sh
-$ go get github.com/axotion/HttpForwarder
+$ git clone git@github.com:axotion/HttpForwarder.git
 ```
 
 ### Usage
@@ -77,10 +77,9 @@ Move sites.json to your project folder and edit it
 ]
 ```
 
-Then in your main section (or whatever you want!) put 
+Then 
 ```GO
-httpForwarder := httpforwarder.New()
-httpForwarder.Run(host, port)
+go build ; ./main
 ```
 **This will run small server for incoming requests**
 
